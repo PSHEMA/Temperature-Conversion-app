@@ -12,6 +12,7 @@ class _TemperatureConversionHomeState extends State<TemperatureConversionHome> {
   final _temperatureController = TextEditingController();
   String _conversionType = 'F to C';
   String _result = '';
+  List _history = [];
 
   void _convert() {
     double inputTemp = double.tryParse(_temperatureController.text) ?? 0;
@@ -25,6 +26,8 @@ class _TemperatureConversionHomeState extends State<TemperatureConversionHome> {
 
     setState(() {
       _result = outputTemp.toStringAsFixed(1);
+      _history
+          .add('${_temperatureController.text} $_conversionType = $_result');
     });
   }
 
@@ -98,6 +101,22 @@ class _TemperatureConversionHomeState extends State<TemperatureConversionHome> {
                   ? 'Result will be shown here'
                   : 'Converted Temperature: $_result',
               style: const TextStyle(fontSize: 18),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'History',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _history.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(_history[index]),
+                  );
+                },
+              ),
             ),
           ],
         ),
